@@ -19,10 +19,12 @@ Sample Android app to demonstrate `WorkManager` (`1.0.0-alpha04`) bug ([Issue 11
 | Expected | Actual |
 |-|-|
 | `PeriodicWorkRequest`-based `Worker` to run every 12 hours | `PeriodicWorkRequest`-based `Worker` runs over and over again <sup>1</sup> |
-| `RUNNING` → `ENQUEUED` (for ~12 hours) → `RUNNING` → `ENQUEUED` (for ~12 hours) → ... | `RUNNING` → `RUNNING` → `RUNNING` → ... |
+| <ul><li>`RUNNING`</li><li>`ENQUEUED` (for ~12 hours)</li><li>`RUNNING`</li><li>`ENQUEUED` (for ~12 hours)</li><li>...</li></ul> | <ul><li>`RUNNING`</li><li>`ENQUEUED` (for ~15 seconds) <sup>2</sup></li><li>`RUNNING`</li><li>`ENQUEUED` (for ~15 seconds) <sup>2</sup></li><li>...</li></ul> |
 | ![Expected Behavior](artwork/behavior_expected.gif) | ![Actual Behavior](artwork/behavior_actual.gif) |
 
 
 <sup>1</sup> _When another `Worker` is started from the original `PeriodicWorkRequest`-based `Worker`._
+
+<sup>2</sup> _Enqueued for a short time, while the "child" `Worker` runs._
 
 [Issue 111195153]: https://issuetracker.google.com/issues/111195153
